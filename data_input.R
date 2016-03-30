@@ -1,6 +1,6 @@
 library(foreign)
-anes_2012 <- read.dta("anes_timeseries_2012_stata12.dta")
-view(anes_2012)
+anes_2008 <- read.dta("anes_timeseries_2008_stata12.dta")
+View(anes_2008)
 
 #Variables of interest
 #drop unneeded variables
