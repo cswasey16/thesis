@@ -19,6 +19,8 @@ anes_2008$V083037b [ anes_2008$V083037b < 0] <- NA
 
 #construct Mayer metric
 
+##dplyr (look up)
+
 anes_2008$cand_therm_sub <- anes_2008$V083037b - anes_2008$V083037a  ##R minus D ##
 
 anes_2008$cand_therm_sub [anes_2008$V083037a < 0 | anes_2008$V083037b < 0 ] <- NA
@@ -27,33 +29,15 @@ summary(anes_2008$cand_therm_sub)
 #construct divided Mayer metric
 anes_2008$mayerbuckets <- NA
 
+anes_2008$mayer15 <- ifelse(anes_2008$cand_therm_sub < 16 & anes_2008$cand_therm_sub > -16, TRUE, FALSE)
+mayer15 <- subset(anes_2008, anes_2008$mayer15 == TRUE)
 
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -96] <- 1
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -86 & anes_2008$cand_therm_sub > 75] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -76 & anes_2008$cand_therm_sub > -65] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -66 & anes_2008$cand_therm_sub > -55] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -56 & anes_2008$cand_therm_sub > -45] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -46 & anes_2008$cand_therm_sub > -35] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -36 & anes_2008$cand_therm_sub > -25] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -26 & anes_2008$cand_therm_sub > -35] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < -16 & anes_2008$cand_therm_sub > -25] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 1 & anes_2008$cand_therm_sub > -15] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 16 & anes_2008$cand_therm_sub > 0] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 26 & anes_2008$cand_therm_sub > 15] <- 2
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 36 & anes_2008$cand_therm_sub > 25] <- 3
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 46 & anes_2008$cand_therm_sub > 35] <- 4
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 56 & anes_2008$cand_therm_sub > 45] <- 5
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 66 & anes_2008$cand_therm_sub > 55] <- 6
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 76 & anes_2008$cand_therm_sub > 65] <- 7
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub < 86 & anes_2008$cand_therm_sub > 75] <- 8
-anes_2008$mayerbuckets [anes_2008$cand_therm_sub > 85] <- 9
+print(wpct(anes_2008$mayerbuckets, weight=anes_2008$V080102a) *100)
 
-
-
-wpct(anes_2008$mayerbuckets, weight=anes_2008$V080102a) *100
 
 plot(wpct(anes_2008$mayerbuckets, weight=anes_2008$V080102a), type="h")
 weight V080102
 
-
-mayer15 <- subset(anes_2008, anes_2008$mayerbuckets == 1 | anes_2008$mayerbuckets == 2)
+mayer15 <- NA
+mayer15 <- subset(anes_2008, anes_2008$mayer15 == TRUE)
+5
