@@ -1,0 +1,29 @@
+#post
+
+#mayer table 2 Republican
+library(stargazer)
+
+#percents across just R
+anes_R <- subset(anes_2008, anes_2008$repvote==TRUE)
+
+dummiesR <- dummy(anes_R$subbucketsfac, sep="", fun= as.numeric, drop=FALSE)
+
+weightsR <- anes_R$V080102
+
+countsR <- colSums(dummiesR)
+
+dumweightR <- sapply(1:ncol(dummiesR),function(x) dummiesR[,x] * weightsR )
+sumsR <- colSums(dumweightR)
+totalR <- sum(sumsR)
+
+range <- c("-100:-91", "-90:-81", "-80:-71", " -70:-61", "-60:-51", "-50:-41", "-40:-3","-30:-21", "-20:-16", "15:-11", "-10:-6", "-5:-1", "0", "1:5",  "6:10", "11:15" ,"16:20", "21:30", "31:40", "41:50",  "51:60", "61:70", "71:80","81:90", "91:100", "NA")
+
+pctvoteR <- (sumsR/sumspost)*100
+percentR <- round(pctvoteR, digits=2)
+names(percentR) <- range
+
+mayer1R <- cbind(range, countsR, percentR)
+
+stargazer(mayer1R, rownames=FALSE)
+
+

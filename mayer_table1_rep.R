@@ -7,18 +7,14 @@ library(DescTools)
 library(plyr)
 library(weights)
 library(dplyr)
+library(dummies)
 
-anes_2008$subbuckets <- anes_2008$cand_therm_sub
+anes_2008$dummy <- dummy.data.frame(anes_2008$subbucketsfac)
 
-anes_2008$subbucketsfac <- recode(anes_2008$subbuckets, "-100:-91='A' ; -90:-81='B' ; 
--80:-71='C'; -70:-61='D' ; -60:-51='E' ; -50:-41='F'; -40:-31='G' ;
--30:-21='H'; -20:-16='I' ; -15:-11='J'; -10:-6='K'; -5:-1='L' ;
-0='M' ; 1:5='N'; 6:10='O'; 11:15='P'; 16:20='Q'; 21:30='R' ;
-31:40='S'; 41:50='T'; 51:60='U'; 61:70='V'; 71:80='W';
-81:90='X'; 91:100='Y' ; else='Z'", as.factor.result = TRUE)
+anes_2008$demvote <- ifelse(anes_2008$V085044a=="1. Barack Obama", TRUE, FALSE)
+anes_2008$repvote <- ifelse(anes_2008$V085044a=="3. John McCain", TRUE, FALSE)
 
-str(anes_2008$subbucketsfac)
-
+summary(anes_2008$demvote)
 
 #count respondents in each bucket
 n_sample_buckets <- count(anes_2008$subbucketsfac)
@@ -34,6 +30,10 @@ anes_2008$postvoter <- NA
 anes_2008$postvoter <- ifelse(anes_2008$V085044=="1. Yes, voted for President", TRUE, FALSE)
 summary(anes_2008$postvoter)
 
+postvote$demvote <- ifelse(postvote$V085044a=="1. Barack Obama", TRUE, FALSE)
+postvote$repvote <- ifelse(postvote$V085044a=="3. John McCain", TRUE, FALSE)
+
+
 #pre vote intention V083169
 anes_2008$prevoter <- NA
 anes_2008$prevoter <- ifelse(anes_2008$V083169=="1. Yes", TRUE, FALSE)
@@ -45,8 +45,7 @@ summary(anes_2008$prevoter)
 prevote <- subset(anes_2008, anes_2008$prevoter==TRUE)
 str(prevote$subbucketsfac)
 prevoters <- count(prevote$subbucketsfac)
-prevoters$perc <- wpct(prevote$subbucketsfac, weight=prevote$V080102a)*100
-
+prevoters$perc <- wpct(prevote$subbucketsfac, weight=prevote$V080102)*100
 
 
 
@@ -55,11 +54,34 @@ prevoters$perc <- wpct(prevote$subbucketsfac, weight=prevote$V080102a)*100
 postvote <- subset(anes_2008, anes_2008$postvoter==TRUE)
 str(postvote$subbucketsfac)
 postvoters <- count(postvote$subbucketsfac)
-postvoters$perc <- wpct(postvote$subbucketsfac, weight=postvote$V080102a)*100
+postvoters$perc <- wpct(postvote$subbucketsfac, weight=postvote$V080102)*100
 
 
 #therm diff, percent of sample, % pre rept voters, % post rept voters
-
+ #combination of postvoters, prevoters, and n_sample_buckets
 
 #therm diff, % post voters, POSTELEC % D, % R, % change from PRE, n
+post_percents <- count(postvote$subbucketsfac)
+post_percents$perc <- wpct(postvote$subbucketsfac, weight=postvote$V080102a)*100
 
+#anes_2008$demsubbucketsfac <- as.factor(ifelse(anes_2008$demvote==TRUE, anes_2008$subbucketsfac, NA))
+## ugh ## anes_2008$demsubbucketsfac <- as.factor( anes_2008$dems <- ifelse(anes_2008$demvote==1, anes_2008$subbucketsfac, NA) labels=c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"))
+#summary(anes_2008$demsubbucketsfac)
+
+postvote$dembucketsfac <- postvote$subbucketsfac
+postvote$dembucketsfac [postvote$demvote==FALSE] <- "Z"
+summary(postvote$dembucketsfac)
+
+postvote$repbucketsfac <- postvote$subbucketsfac
+postvote$repbucketsfac [postvote$repvote==FALSE] <- "Z"
+summary(postvote$repbucketsfac)
+
+
+
+
+summary(anes_2008$V080102)
+
+#i need % of total bucket population that voted D or R
+#so  dembucketsfac/subbucketsfac
+#but those are unweighted
+#ughhhhh
