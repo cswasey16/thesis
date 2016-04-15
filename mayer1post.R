@@ -21,9 +21,14 @@ range <- c("-100:-91", "-90:-81", "-80:-71", " -70:-61", "-60:-51", "-50:-41", "
 wpctpost <- (sumspost/totalpost)*100
 percentpost <- round(wpctpost, digits=2)
 names(percentpost) <- range
+pctdrop <- round(((sumspre-sumspost)/sumspre)*100, digits = 2)
+pcttotaldrop <- round((((sumspre-sumspost)/(totalpre-totalpost))*100), digits=2)
+  
+mayer1 <- cbind(range, countspre, percentpre, countspost, percentpost, pctdrop, pcttotaldrop)
 
-mayer1post <- cbind(range, countspost, percentpost)
+stargazer(mayer1, rownames=FALSE)
 
-stargazer(mayer1post, rownames=FALSE)
 
+plot(pctdrop)
+plot(pcttotaldrop)
 

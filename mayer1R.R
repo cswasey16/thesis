@@ -22,7 +22,7 @@ pctvoteR <- (sumsR/sumspost)*100
 percentR <- round(pctvoteR, digits=2)
 names(percentR) <- range
 
-mayer1R <- cbind(range, countsR, percentR)
+mayer1total <- cbind(range, countsD, percentD, countsR, percentR)
 
 stargazer(mayer1R, rownames=FALSE)
 
