@@ -16,10 +16,14 @@ Dthermpcts <- wpct(anes_2008$V083037a, weight= anes_2008$V080102, na.rm=TRUE)*10
 Dthermpcts
 100-sum(Dthermpcts["0"], Dthermpcts["15"], Dthermpcts["30"], Dthermpcts["40"], Dthermpcts["50"], Dthermpcts["60"], Dthermpcts["70"], Dthermpcts["85"], Dthermpcts["100"])
 
+Oavg <- weighted.mean(anes_2008$V083037b, anes_2008$V080102, na.rm=TRUE)
+Cavg <- weighted.mean(anes_2008$V083037a, anes_2008$V080102, na.rm=TRUE)
+
 
 mainpoints <- c(0, 15, 30, 40, 50, 60, 70, 85, 100, "Other")
-Dmainpointpct <- round(c(Rthermpcts["0"], Rthermpcts["15"], Rthermpcts["30"], Rthermpcts["40"], Rthermpcts["50"], Rthermpcts["60"], Rthermpcts["70"], Rthermpcts["85"], Rthermpcts["100"], 2.8), digits=1)
-Rmainpointpct <- round(c(Dthermpcts["0"], Dthermpcts["15"], Dthermpcts["30"], Dthermpcts["40"], Dthermpcts["50"], Dthermpcts["60"], Dthermpcts["70"], Dthermpcts["85"], Dthermpcts["100"], 3.7), digits=1)
+Dmainpointpct <- round(c(Rthermpcts["0"], Rthermpcts["15"], Rthermpcts["30"], Rthermpcts["40"], Rthermpcts["50"], Rthermpcts["60"], Rthermpcts["70"], Rthermpcts["85"], Rthermpcts["100"], 2.8, Oavg), digits=1)
+Rmainpointpct <- round(c(Dthermpcts["0"], Dthermpcts["15"], Dthermpcts["30"], Dthermpcts["40"], Dthermpcts["50"], Dthermpcts["60"], Dthermpcts["70"], Dthermpcts["85"], Dthermpcts["100"], 3.7, Cavg), digits=1)
+
 mainpointtable <- cbind(Dmainpointpct, Rmainpointpct)
 stargazer(mainpointtable)
 
